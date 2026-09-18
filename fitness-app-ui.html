@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Fitness App UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#EDEFEA;
+    --page-fg:#14181C;
+    --panel-bg:#ffffff;
+    --panel-border:#DEE1D9;
+    --muted:#6B7269;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --page-bg:#15171A;
+      --page-fg:#EDEFEA;
+      --panel-bg:#1D2023;
+      --panel-border:#2B2F32;
+      --muted:#9AA098;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page-bg:#15171A;
+    --page-fg:#EDEFEA;
+    --panel-bg:#1D2023;
+    --panel-border:#2B2F32;
+    --muted:#9AA098;
+  }
+
+  /* fixed app-product palette (the "screenshot" itself, not page-theme dependent) */
+  :root{
+    --app-bg:#EDEFEA;
+    --app-card:#FFFFFF;
+    --app-text:#14181C;
+    --app-muted:#6B7269;
+    --app-coral:#FF4B3E;
+    --app-teal:#0B3B36;
+    --app-teal-soft:#E4F0EE;
+    --app-gold:#E8B33D;
+    --app-line:#E3E5DD;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--page-bg);
+    color:var(--page-fg);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height:100vh;
+    padding:48px 24px 80px;
+  }
+  h1,h2,.headline{font-family:'Space Grotesk', sans-serif;}
+
+  .wrap{max-width:1180px;margin:0 auto;}
+  header.page-head{margin-bottom:40px;}
+  header.page-head h1{font-size:clamp(28px,4vw,40px);font-weight:700;margin:0 0 8px;letter-spacing:-0.01em;}
+  header.page-head p{margin:0;color:var(--muted);font-size:15px;max-width:520px;line-height:1.5;}
+
+  .frames{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+    gap:40px;
+    align-items:start;
+  }
+
+  .phone-shell{
+    width:300px;
+    margin:0 auto;
+  }
+  .phone-label{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+    margin-bottom:12px;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .phone-label span.num{color:var(--app-coral);}
+
+  .phone{
+    width:300px;
+    height:620px;
+    border-radius:36px;
+    background:#0A0C0D;
+    padding:10px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.12);
+    position:relative;
+  }
+  .screen{
+    width:100%;
+    height:100%;
+    border-radius:28px;
+    background:var(--app-bg);
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    font-family:'Inter',sans-serif;
+    color:var(--app-text);
+  }
+  .notch{
+    position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    width:70px;height:18px;background:#0A0C0D;border-radius:12px;z-index:5;
+  }
+
+  .app-content{flex:1;overflow:hidden;padding:38px 18px 0;position:relative;}
+  .app-content .pane{
+    position:absolute;inset:0;padding:38px 18px 0;
+    opacity:0; transform:translateX(16px);
+    pointer-events:none;
+    transition:opacity .32s ease, transform .32s ease;
+  }
+  .app-content .pane.active{
+    opacity:1; transform:translateX(0);
+    pointer-events:auto;
+  }
+
+  /* ---- Home pane ---- */
+  .greet{font-size:12px;color:var(--app-muted);font-weight:500;}
+  .greet-name{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin:2px 0 18px;}
+
+  .stat-row{display:flex;gap:10px;margin-bottom:12px;}
+  .stat-card{
+    flex:1;background:var(--app-card);border:1px solid var(--app-line);
+    border-radius:16px;padding:12px 10px;
+  }
+  .stat-card .val{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;}
+  .stat-card .lbl{font-size:10.5px;color:var(--app-muted);margin-top:2px;font-weight:500;}
+
+  .streak-card{
+    background:var(--app-teal);color:#fff;border-radius:18px;
+    padding:16px 16px;margin:14px 0;display:flex;align-items:center;justify-content:space-between;
+  }
+  .streak-card .num{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;}
+  .streak-card .txt{font-size:11.5px;opacity:.85;margin-top:2px;}
+
+  .cta-btn{
+    width:100%;background:var(--app-coral);color:#fff;border:none;
+    border-radius:16px;padding:14px;font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:14px;letter-spacing:.01em;cursor:pointer;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .cta-btn:active{transform:scale(.97);filter:brightness(.94);}
+
+  .section-lbl{font-size:11px;color:var(--app-muted);font-weight:600;margin:18px 0 8px;}
+  .list-card{
+    display:flex;align-items:center;gap:10px;background:var(--app-card);
+    border:1px solid var(--app-line);border-radius:14px;padding:10px 12px;margin-bottom:8px;
+  }
+  .dot{width:34px;height:34px;border-radius:10px;background:var(--app-teal-soft);flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .list-card .t{font-size:12.5px;font-weight:600;}
+  .list-card .s{font-size:10.5px;color:var(--app-muted);}
+
+  /* ---- Workout pane ---- */
+  .w-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;margin-bottom:2px;}
+  .w-sub{font-size:11.5px;color:var(--app-muted);margin-bottom:18px;}
+  .ring-wrap{display:flex;justify-content:center;margin:6px 0 16px;position:relative;}
+  .ring-time{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;
+  }
+  .ring-time .t{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;}
+  .ring-time .l{font-size:10px;color:var(--app-muted);margin-top:2px;}
+
+  .w-metrics{display:flex;justify-content:space-between;padding:0 6px;margin-bottom:16px;}
+  .w-metrics div{text-align:center;}
+  .w-metrics .v{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
+  .w-metrics .k{font-size:9.5px;color:var(--app-muted);}
+
+  .play-btn{
+    width:64px;height:64px;border-radius:50%;background:var(--app-coral);
+    border:none;margin:0 auto;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:transform .15s ease, background .2s ease;
+  }
+  .play-btn:active{transform:scale(.94);}
+  .play-btn svg{width:22px;height:22px;fill:#fff;}
+  .play-btn.playing{background:var(--app-teal);}
+
+  /* ---- Progress pane ---- */
+  .chart-row{display:flex;align-items:flex-end;gap:10px;height:130px;margin:20px 0 8px;padding:0 4px;}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .bar{width:100%;max-width:22px;background:var(--app-teal-soft);border-radius:6px 6px 0 0;height:4px;transition:height 1s cubic-bezier(.2,.8,.2,1);}
+  .bar.today{background:var(--app-coral);}
+  .bar-col .dlbl{font-size:9.5px;color:var(--app-muted);}
+
+  .summary-card{
+    background:var(--app-card);border:1px solid var(--app-line);border-radius:16px;
+    padding:14px 16px;margin-top:10px;
+  }
+  .summary-card .v{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;}
+  .summary-card .l{font-size:11px;color:var(--app-muted);}
+
+  /* ---- Profile pane ---- */
+  .avatar{
+    width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--app-coral),var(--app-gold));
+    margin:4px auto 10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;font-size:22px;
+  }
+  .p-name{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;}
+  .p-sub{text-align:center;font-size:11px;color:var(--app-muted);margin-bottom:16px;}
+  .p-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 4px;border-bottom:1px solid var(--app-line);font-size:12.5px;
+  }
+  .p-row:last-child{border-bottom:none;}
+  .p-row .k{font-weight:500;}
+  .p-row .v{color:var(--app-muted);font-size:11.5px;}
+
+  /* nav */
+  .navbar{
+    height:66px;flex:none;background:var(--app-card);
+    border-top:1px solid var(--app-line);
+    display:flex;align-items:center;justify-content:space-around;
+    padding-bottom:6px;
+  }
+  .nav-btn{
+    background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
+    align-items:center;gap:3px;color:var(--app-muted);font-size:9.5px;font-weight:600;
+    font-family:'Inter',sans-serif;padding:4px 8px;
+  }
+  .nav-btn svg{width:19px;height:19px;stroke:var(--app-muted);fill:none;stroke-width:1.8;transition:stroke .2s;}
+  .nav-btn.active{color:var(--app-coral);}
+  .nav-btn.active svg{stroke:var(--app-coral);}
+
+  footer.note{
+    max-width:1180px;margin:48px auto 0;color:var(--muted);font-size:12.5px;line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page-head">
+    <h1>Pulse — fitness tracker UI</h1>
+    <p>A 4-screen mobile app concept: dashboard, live workout tracker, weekly progress and profile — with tappable navigation and live micro-interactions (ring fill, button states, animated bars).</p>
+  </header>
+
+  <div class="frames">
+
+    <div>
+      <div class="phone-label"><span class="num">01</span> Today</div>
+      <div class="phone"><div class="notch"></div>
+        <div class="screen" data-screen-root="1">
+          <div class="app-content">
+            <div class="pane active" data-pane="home">
+              <div class="greet">Good morning</div>
+              <div class="greet-name">Hey, Diksha</div>
+              <div class="stat-row">
+                <div class="stat-card"><div class="val">6,214</div><div class="lbl">STEPS</div></div>
+                <div class="stat-card"><div class="val">412</div><div class="lbl">KCAL</div></div>
+                <div class="stat-card"><div class="val">38m</div><div class="lbl">ACTIVE</div></div>
+              </div>
+              <div class="streak-card">
+                <div><div class="num">12</div><div class="txt">day streak</div></div>
+                <div style="font-size:26px;">🔥</div>
+              </div>
+              <button class="cta-btn" data-goto="workout">Start today's workout</button>
+              <div class="section-lbl">SUGGESTED</div>
+              <div class="list-card"><div class="dot">🏃</div><div><div class="t">Morning run</div><div class="s">5.2 km · easy pace</div></div></div>
+              <div class="list-card"><div class="dot">🧘</div><div><div class="t">Mobility flow</div><div class="s">10 min · recovery</div></div></div>
+            </div>
+            <div class="pane" data-pane="workout">
+              <div class="w-title">Full body HIIT</div>
+              <div class="w-sub">Round 2 of 4 · interval training</div>
+              <div class="ring-wrap">
+                <svg width="160" height="160" viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="68" fill="none" stroke="var(--app-line)" stroke-width="10"/>
+                  <circle id="ringProgress" cx="80" cy="80" r="68" fill="none" stroke="var(--app-coral)" stroke-width="10"
+                    stroke-linecap="round" stroke-dasharray="427.3" stroke-dashoffset="427.3"
+                    transform="rotate(-90 80 80)"/>
+                </svg>
+                <div class="ring-time"><div class="t" id="ringTime">00:00</div><div class="l">of 20:00</div></div>
+              </div>
+              <div class="w-metrics">
+                <div><div class="v" id="hrVal">102</div><div class="k">BPM</div></div>
+                <div><div class="v">228</div><div class="k">KCAL</div></div>
+                <div><div class="v">4</div><div class="k">ROUNDS</div></div>
+              </div>
+              <button class="play-btn" id="playBtn">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+            <div class="pane" data-pane="progress">
+              <div class="w-title">This week</div>
+              <div class="w-sub">Active minutes by day</div>
+              <div class="chart-row" id="chartRow">
+                <div class="bar-col"><div class="bar" data-h="40"></div><div class="dlbl">M</div></div>
+                <div class="bar-col"><div class="bar" data-h="65"></div><div class="dlbl">T</div></div>
+                <div class="bar-col"><div class="bar" data-h="30"></div><div class="dlbl">W</div></div>
+                <div class="bar-col"><div class="bar" data-h="90"></div><div class="dlbl">T</div></div>
+                <div class="bar-col"><div class="bar" data-h="50"></div><div class="dlbl">F</div></div>
+                <div class="bar-col"><div class="bar today" data-h="72"></div><div class="dlbl">S</div></div>
+                <div class="bar-col"><div class="bar" data-h="0"></div><div class="dlbl">S</div></div>
+              </div>
+              <div class="summary-card"><div class="v">4h 47m</div><div class="l">total active time · +18% vs last week</div></div>
+            </div>
+            <div class="pane" data-pane="profile">
+              <div class="avatar">D</div>
+              <div class="p-name">Diksha</div>
+              <div class="p-sub">Member since Jan 2026</div>
+              <div class="p-row"><div class="k">Weekly goal</div><div class="v">5 workouts</div></div>
+              <div class="p-row"><div class="k">Units</div><div class="v">Metric</div></div>
+              <div class="p-row"><div class="k">Connected watch</div><div class="v">Not linked</div></div>
+              <div class="p-row"><div class="k">Notifications</div><div class="v">On</div></div>
+              <div class="p-row"><div class="k">App version</div><div class="v">1.0.0</div></div>
+            </div>
+          </div>
+          <div class="navbar">
+            <button class="nav-btn active" data-nav="home"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5"/></svg>Today</button>
+            <button class="nav-btn" data-nav="workout"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Train</button>
+            <button class="nav-btn" data-nav="progress"><svg viewBox="0 0 24 24"><path d="M4 19V9M11 19V4M18 19v-7"/></svg>Progress</button>
+            <button class="nav-btn" data-nav="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>Profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="note">Tap the nav bar to switch screens · tap the coral button in Train to start/pause the timer and watch the ring, BPM and elapsed time animate.</footer>
+</div>
+
+<script>
+(function(){
+  const root = document.querySelector('[data-screen-root="1"]');
+  const panes = root.querySelectorAll('.pane');
+  const navBtns = root.querySelectorAll('.nav-btn');
+
+  function goto(name){
+    panes.forEach(p=>p.classList.toggle('active', p.dataset.pane===name));
+    navBtns.forEach(b=>b.classList.toggle('active', b.dataset.nav===name));
+  }
+  navBtns.forEach(b=>b.addEventListener('click',()=>goto(b.dataset.nav)));
+  root.querySelectorAll('[data-goto]').forEach(b=>{
+    b.addEventListener('click',()=>goto(b.dataset.goto));
+  });
+
+  // bar chart grow-in
+  const bars = root.querySelectorAll('.bar');
+  let barsAnimated = false;
+  function animateBars(){
+    if(barsAnimated) return; barsAnimated = true;
+    bars.forEach(b=>{
+      const h = parseFloat(b.dataset.h);
+      requestAnimationFrame(()=>{ b.style.height = Math.max(h,4) + 'px'; });
+    });
+  }
+  const progressNav = root.querySelector('[data-nav="progress"]');
+  progressNav.addEventListener('click', animateBars);
+
+  // workout ring / timer
+  const ring = root.querySelector('#ringProgress');
+  const ringTime = root.querySelector('#ringTime');
+  const playBtn = root.querySelector('#playBtn');
+  const playIcon = root.querySelector('#playIcon');
+  const hrVal = root.querySelector('#hrVal');
+  const CIRC = 427.3;
+  const DURATION = 20*60; // 20 min displayed, sped up for demo
+  let elapsed = 0, timer = null, playing = false;
+
+  function fmt(s){
+    const m = Math.floor(s/60).toString().padStart(2,'0');
+    const ss = Math.floor(s%60).toString().padStart(2,'0');
+    return m+':'+ss;
+  }
+  function render(){
+    ringTime.textContent = fmt(elapsed);
+    const pct = Math.min(elapsed/DURATION,1);
+    ring.style.strokeDashoffset = CIRC*(1-pct);
+  }
+  playBtn.addEventListener('click', ()=>{
+    playing = !playing;
+    playBtn.classList.toggle('playing', playing);
+    playIcon.innerHTML = playing
+      ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'
+      : '<path d="M8 5v14l11-7z"/>';
+    if(playing){
+      timer = setInterval(()=>{
+        elapsed += 5; // sped-up demo seconds
+        if(elapsed >= DURATION){ elapsed = DURATION; clearInterval(timer); playing=false; playBtn.classList.remove('playing'); playIcon.innerHTML='<path d="M8 5v14l11-7z"/>'; }
+        hrVal.textContent = 96 + Math.floor(Math.random()*22);
+        render();
+      }, 200);
+    } else {
+      clearInterval(timer);
+    }
+  });
+  render();
+})();
+</script>
+</body>
+</html>

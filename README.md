@@ -1,6 +1,34 @@
 # Graphic Design Internship Projects
 
-Two deliverables built and rendered as standalone web files — just open the HTML files in any browser, no install needed.
+Two deliverables — live interactive builds, screenshots, and demo recordings.
+
+## 1. Pulse — Fitness App UI
+
+![Fitness app screenshot](fitness-app-screenshot.png)
+
+
+
+https://github.com/user-attachments/assets/1bef1210-7912-4679-987b-cea183e910ea
+
+
+
+[Live demo →](https://diksha-wadekar.github.io/internship-design-projects/fitness-app-ui.html)
+
+A 4-screen mobile fitness app (Today, Train, Progress, Profile) with working navigation and a functional workout timer with animated progress ring.
+
+## 2. Aurora — 3D Logo Animation
+
+![3D logo screenshot](logo-3d-screenshot.png)
+
+
+
+https://github.com/user-attachments/assets/5b9fcb9d-68af-4774-bc8a-040bf7286b7c
+
+
+
+[Live demo →](https://diksha-wadekar.github.io/internship-design-projects/logo-3d-animation.html)
+
+A 3D logo mark that assembles from scattered pieces, then settles into an idle rotation with camera motion and three-point lighting.
 
 ## 1. Pulse — Fitness App UI (`fitness-app-ui.html`)
 A 4-screen mobile fitness app UI (Today, Train, Progress, Profile) with working navigation and micro-interactions — tap the bottom nav to switch screens, and tap play on the Train screen to see the progress ring and timer animate.
